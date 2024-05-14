@@ -1,19 +1,6 @@
-module demux_1_8(y,s,a);
-output reg [7:0]y;
-input [2:0]s;
-input a;
-always @(*)
-begin 
-y=0;
-case(s)
-3'd0: y[0]=a;
-3'd1: y[1]=a;
-3'd2: y[2]=a;
-3'd3: y[3]=a;
-3'd4: y[4]=a;
-3'd5: y[5]=a;
-3'd6: y[6]=a;
-3'd7: y[7]=a;
-endcase
-end
+module encoder_8_to_3(a0,a1,a2,d0,d1,d2,d3,d4,d5,d6,d7);input d0,d1,d2,d3,d4,d5,d6,d7;
+output a0,a1,a2;
+or g1(a0,d1,d3,d5,d7);
+or g2(a1,d2,d3,d6,d7);
+or g3(a2,d4,d5,d6,d7);
 endmodule
