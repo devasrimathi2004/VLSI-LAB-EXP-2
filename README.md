@@ -50,14 +50,32 @@ STEP:11  On the board, by giving required input, the LEDs starts to glow light, 
 
 VERILOG CODE
 
-DECODER3TO8:
+ENCODER:
 ~~~
-module decoder_struct( 
-input [2:0] a,   
-output [7:0] d ); 
+module encoder8to3(a0,a1,a2,d0,d1,d2,d3,d4,d5,d6,d7);
+input d0,d1,d2,d3,d4,d5,d6,d7;
+output a0,a1,a2;
+or g1(a0,d1,d3,d5,d7);
+or g2 (a1,d2,d3,d6,d7);
+or g3(a2,d4,d5,d6,d7);
+endmodule
+~~~
+
+OUTPUT:
+
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/96a7afb1-59d1-4924-9e32-386663a4a186)
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/62689c32-605f-4024-bf9a-4379ccd53f91)
+
+
+DECODER:
+~~~
+module decoder_struct(
+   input [2:0] a,
+  output [7:0] d
+   );
 wire x,y,z;
 not g1(z,a[0]);
-not g2(y,a[1]); 
+not g2(y,a[1]);
 not g3(x,a[2]);
 and g4(d[0],x,y,z);
 and g5(d[1],x,y,a[0]);
@@ -72,28 +90,29 @@ endmodule
 
 OUTPUT:
 
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/f5ce91e5-56a8-4084-bd3b-8496f2739372)
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/d3472584-a110-4255-b1e3-a7c987a578fe)
 
 
-
-
-DEMULTIPLEXER1TO8:
+DEMULTIPLEXER:
 ~~~
-module demux_1_8(y,s,a);
-output reg [7:0]y;
-input [2:0]s;
+module demultiplexer1to8(y,s,a);
+output reg[7:0]y;
+input[2:0]s;
 input a;
-always @(*)
+
+always@(*)
 begin 
 y=0;
 case(s)
-3'd0: y[0]=a;
-3'd1: y[1]=a;
-3'd2: y[2]=a;
-3'd3: y[3]=a;
-3'd4: y[4]=a;
-3'd5: y[5]=a;
-3'd6: y[6]=a;
-3'd7: y[7]=a;
+3'd0:y[0]=a;
+3'd1:y[1]=a;
+3'd2:y[2]=a;
+3'd3:y[3]=a;
+3'd4:y[4]=a;
+3'd5:y[5]=a;
+3'd6:y[6]=a;
+3'd7:y[7]=a;
 endcase
 end
 endmodule
@@ -101,51 +120,34 @@ endmodule
 
 OUTPUT:
 
-
-
-
-
-ENCODER8TO3:
-~~~
-module encoder_8_to_3(a0,a1,a2,d0,d1,d2,d3,d4,d5,d6,d7);input d0,d1,d2,d3,d4,d5,d6,d7;
-output a0,a1,a2;
-or g1(a0,d1,d3,d5,d7);
-or g2(a1,d2,d3,d6,d7);
-or g3(a2,d4,d5,d6,d7);
-endmodule
-~~~
-
-OUTPUT:
-
-
-
-
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/e8a9eb8c-7ab5-4ebd-b9ac-24b256f4427c)
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/f79a3de3-0d1b-44f2-a6b9-109e834d77e1)
 
 
 MAGNITUDECOMPARATOR:
 ~~~
-module comparator(a,b,eq,lt,gt);
-input [3:0] a,b;
-output reg eq,lt,gt;
-always @(a,b)
+module comparator(a,b,eq,It,gt);
+input[3:0]a,b;
+output reg eq,It,gt;
+always@(a,b)
 begin
-if (a==b)
+if(a==b)
 begin
-eq = 1'b1;
-lt = 1'b0;
-gt = 1'b0;
-end
-else if (a>b)
+eq=1'b1;
+It=1'b0;
+gt=1'b0;
+end 
+else if(a>b)
 begin
-eq = 1'b0;
-lt = 1'b0;
-gt = 1'b1;
+eq=1'b0;
+It=1'b0;
+gt=1'b1;
 end
 else
 begin
-eq = 1'b0;
-lt = 1'b1;
-gt = 1'b0;
+eq=1'b0;
+It=1'b1;
+gt=1'b0;
 end
 end 
 endmodule
@@ -153,50 +155,40 @@ endmodule
 
 OUTPUT:
 
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/d35b901d-20e6-43c8-a8c9-06885ffc8b85)
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/f0f4f178-63cf-49f5-8d9f-5b5f2e74a817)
 
 
-
-
-
-
-MULTIPLEXER8TO1:
+MULTIPLEXER:
 ~~~
-module comparator(a,b,eq,lt,gt);
-input [3:0] a,b;
-output reg eq,lt,gt;
-always @(a,b)
-begin
-if (a==b)
-begin
-eq = 1'b1;
-lt = 1'b0;
-gt = 1'b0;
+module mux_8to1(in,sel,out);
+input [7:0] in; input [2:0] sel;
+output reg out;
+always @(*)
+begin 
+case(sel)
+3'b000: out = in[0];
+3'b001: out = in[1];
+3'b010: out = in[2];
+3'b011: out = in[3];
+3'b100: out = in[4];
+3'b101: out = in[5];
+3'b110: out = in[6];
+3'b111: out = in[7];
+default:out = 1'bx;
+endcase
 end
-else if (a>b)
-begin
-eq = 1'b0;
-lt = 1'b0;
-gt = 1'b1;
-end
-else
-begin
-eq = 1'b0;
-lt = 1'b1;
-gt = 1'b0;
-end
-end 
 endmodule
 ~~~
 
 OUTPUT:
 
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/010cd361-49ab-43dd-8066-4ebae853d161)
+![image](https://github.com/devasrimathi2004/VLSI-LAB-EXP-2/assets/166363441/089174e5-2441-4306-8b63-357b2c9cc835)
 
 
+RESULT:Hence ENCODER, DECODER, MULTIPLEXER, DEMULTIPLEXER, MAGNITUDE COMPARATOR are simulated and sysnthesised using vivado 2023.1.
 
-
-
-
-RESULT:
 
 
 
